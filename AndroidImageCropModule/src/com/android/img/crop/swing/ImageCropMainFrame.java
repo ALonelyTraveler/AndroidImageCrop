@@ -3,7 +3,9 @@ package com.android.img.crop.swing;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -39,7 +41,7 @@ import com.android.img.crop.utils.ImageUtils;
 
 public class ImageCropMainFrame extends JFrame implements GenerateListener {
 	public JPanel jPanel;
-	public JLabel jLabel, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6;
+	public JLabel jLabel, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6,jLabel7,jLabel8,jLabel9,jLabel10;
 	public JButton jButton, jButton2, jButton3, jButton4;
 	public JTextField jField, jField2, jField3, jField4;
 	public JComboBox jcb1;
@@ -98,70 +100,86 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 		jLabel2 = new JLabel();
 		ImageIcon jLabel2_img = new ImageIcon(this.getClass().getResource(
 				"/png/img_android_logo.png"));
-		jLabel2.setBounds(0, 40, 208, 281);
+		jLabel2.setBounds(15, 40, 208, 281);
 		jLabel2.setIcon(jLabel2_img);
+		jLabel7 = new JLabel("文件路径：");
+		jLabel7.setBounds(220, 30,70, 30);
+		jLabel7.setForeground(Color.white);
+		jField = new JTextField();
+		jField.setBounds(290, 30, 160, 30);
 		jButton = new JButton("选择");
 		jButton.setBounds(490, 30, 80, 30);
-		jField = new JTextField();
-		jField.setBounds(220, 30, 230, 30);
+		jLabel8 = new JLabel("图片规格：");
+		jLabel8.setForeground(Color.white);
+		jLabel8.setBounds(220, 70,70, 30);
 		jcb1 = new JComboBox<>(new DefaultComboBoxModel());
-		jcb1.setBounds(220, 70, 120, 30);
+		jcb1.setBounds(290, 70, 90, 30);
 		jLabel3 = new JLabel("宽度：");
 		jLabel3.setForeground(Color.white);
-		jLabel3.setBounds(350, 70, 40, 30);
+		jLabel3.setBounds(390, 70, 40, 30);
 		jField2 = new JTextField();
-		jField2.setBounds(390, 70, 70, 30);
+		jField2.setBounds(430, 70, 50, 30);
 		jLabel4 = new JLabel("高度：");
 		jLabel4.setForeground(Color.white);
-		jLabel4.setBounds(470, 70, 40, 30);
+		jLabel4.setBounds(490, 70, 40, 30);
 		jField3 = new JTextField();
-		jField3.setBounds(510, 70, 70, 30);
+		jField3.setBounds(530, 70, 50, 30);
+		jLabel9 = new JLabel("图片名称：");
+		jLabel9.setForeground(Color.white);
+		jLabel9.setBounds(220, 110, 70, 30);
 		jLabel5 = new JLabel("生成尺寸：");
 		jLabel5.setForeground(Color.white);
-		jLabel5.setBounds(220, 120, 70, 30);
+		jLabel5.setBounds(220, 150, 70, 30);
 		jField4 = new JTextField();
 		jField4.setBounds(295, 110, 120, 30);
 		panel_category_select = new JPanel();
-		panel_category_select.setLayout(new GridLayout(1, models.size()));
-		panel_category_select.setBounds(220, 150, 360, 30);
+		panel_category_select.setLayout(null);
+		panel_category_select.setBounds(220, 180, 360, 30);
+		jLabel10 = new JLabel();
+		ImageIcon jLabel10_img = new ImageIcon(this.getClass().getResource(
+				"/png/bg_jpanel.png"));
+		jLabel10.setBounds(0, 0, 360, 30);
+		jLabel10.setIcon(jLabel10_img);
 		jLabel6 = new JLabel("注：如果选择了源尺寸将会覆盖源文件");
 		jLabel6.setForeground(Color.red);
 		jLabel6.setFont(new Font("Dialog", 1, 12));
-		jLabel6.setBounds(220, 200, 240, 30);
-		jButton2 = new JButton("修改配置文件");
-		jButton2.setBounds(220, 245, 120, 30);
+		jLabel6.setBounds(220, 220, 240, 30);
 		jButton3 = new JButton("马上生成");
 		jButton3.setForeground(Color.red);
-		jButton3.setBounds(370, 245, 120, 30);
-		jButton4 = new JButton("恢复默认设置");
-		jButton4.setBounds(220, 285, 120, 30);
-		jPanel.add(jButton4);
+		jButton3.setBounds(370, 260, 120, 30);
 		jPanel.add(jButton3);
-		jPanel.add(jButton2);
 		jPanel.add(jLabel6);
-		jPanel.add(panel_category_select);
-		jPanel.add(jField4);
-		jPanel.add(jLabel5);
-		jPanel.add(jField3);
-		jPanel.add(jLabel4);
-		jPanel.add(jField2);
-		jPanel.add(jLabel3);
-		jPanel.add(jcb1);
-		jPanel.add(jField);
-		jPanel.add(jButton);
-		jPanel.add(jLabel2);
-		jPanel.add(jLabel);
-		add(jPanel);
 		boolean select = false;
+		int x = 0;
 		for (ConfigModel model : models) {
 			JCheckBox checkBox = new JCheckBox(model.getName());
+			checkBox.setBackground(null);
+			checkBox.setBounds(x, 0, 80, 30);
 			checkBoxs.add(checkBox);
 			if (!select) {
 				checkBox.setSelected(true);
 				select = false;
 			}
+			x += 90;
 			panel_category_select.add(checkBox);
 		}
+		panel_category_select.add(jLabel10);
+		jPanel.add(panel_category_select);
+		jPanel.add(jField4);
+		jPanel.add(jLabel9);
+		jPanel.add(jLabel5);
+		jPanel.add(jField3);
+		jPanel.add(jLabel4);
+		jPanel.add(jField2);
+		jPanel.add(jLabel3);
+		jPanel.add(jLabel8);
+		jPanel.add(jcb1);
+		jPanel.add(jLabel7);
+		jPanel.add(jField);
+		jPanel.add(jButton);
+		jPanel.add(jLabel2);
+		jPanel.add(jLabel);
+		add(jPanel);
 		if (models != null) {
 			for (int i = 0; i < models.size(); i++) {
 				jcb1.addItem(models.get(i).getName());
@@ -253,7 +271,7 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 	@Override
 	public void generateStart() {
 		// TODO Auto-generated method stub
-		JOptionPane.showMessageDialog(null, "正在生成中，请耐心等待,点击确认继续!",  "提示",JOptionPane.DEFAULT_OPTION); 
+		//JOptionPane.showMessageDialog(null, "正在生成中，请耐心等待,点击确认继续!",  "提示",JOptionPane.DEFAULT_OPTION); 
 	}
 
 	@Override

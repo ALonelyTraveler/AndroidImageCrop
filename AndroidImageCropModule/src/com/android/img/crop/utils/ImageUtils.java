@@ -56,6 +56,48 @@ public class ImageUtils {
 		return result;
 
 	}
+	
+	public static BufferedImage zoomImageIcon(File srcfile, int dstWidth) {
+
+		BufferedImage result = null;
+
+		try {
+			BufferedImage im = ImageIO.read(srcfile);
+
+			/* 原始图像的宽度和高度 */
+			int width = im.getWidth();
+			int height = im.getHeight();
+
+			// 压缩计算
+			float resizeTimes = dstWidth * 1f / width; /*
+														 * 这个参数是要转化成的倍数,如果是1就是转化成1倍
+														 */
+			System.out.println("resizeTimes-->"+resizeTimes);
+			/* 调整后的图片的宽度和高度 */
+			int toWidth = (int) (width * resizeTimes);
+			int toHeight = (int) (height * resizeTimes);
+			if(toWidth<=0)
+			{
+				toWidth = 1;
+			}
+			if(toHeight<=0)
+			{
+				toHeight = 1;
+			}
+			/* 新生成结果图片 */
+			result = new BufferedImage(toWidth, toHeight,
+					BufferedImage.TYPE_INT_ARGB);
+			result.getGraphics().drawImage(
+					im.getScaledInstance(toWidth, toHeight,
+							java.awt.Image.SCALE_SMOOTH), 0, 0, null);
+
+		} catch (Exception e) {
+			System.out.println("创建缩略图发生异常" + e.getMessage());
+		}
+
+		return result;
+
+	}
 
 	public static boolean writeHighQuality(BufferedImage im, File file) {
 		/*

@@ -66,7 +66,7 @@ public class GenerateBuilder {
 				listener.generateStart();
 			}
 			if (srcFile.exists() && srcFile.isDirectory()) {
-				List<File> files = FileUtils.getAllWithEnd(srcFile, "jpg",
+				List<File> files = FileUtils.getWithEnd(srcFile, "jpg",
 						"png");
 				if (files != null) {
 					for (File file : files) {
@@ -82,8 +82,7 @@ public class GenerateBuilder {
 								if(file.getName().equals(iconName))
 								{
 									ImageUtils.writeHighQuality(
-											ImageUtils.zoomImage(file,
-													currentModel.getIconWidth(),
+											ImageUtils.zoomImageIcon(file,
 													model.getIconWidth()), dstFile);
 								}
 								else{
