@@ -1,10 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<img_config>
-		<model name="mdpi" width="240" height="320" folder="drawable-mdpi" iconWidth="48"/>
-		<model name="hdpi" width="480" height="800" folder="drawable-hdpi" iconWidth="72"/>
-		<model name="xhdpi" width="720" height="1280" folder="drawable-xhdpi" iconWidth="96"/>
-		<model name="xxhdpi" width="1080" height="1920" folder="drawable-xxhdpi" iconWidth="144"/>
+		<model name="mdpi" width="240" height="320" folder="drawable-mdpi"
+			iconWidth="48" />
+		<model name="hdpi" width="480" height="800" folder="drawable-hdpi"
+			iconWidth="72" />
+		<model name="xhdpi" width="720" height="1280" folder="drawable-xhdpi"
+			iconWidth="96" />
+		<model name="xxhdpi" width="1080" height="1920" folder="drawable-xxhdpi"
+			iconWidth="144" />
 	</img_config>
-	<default_icon_name name="ic_launcher.png"/>
+	<default_icon_name name="ic_launcher.png" />
 </config>

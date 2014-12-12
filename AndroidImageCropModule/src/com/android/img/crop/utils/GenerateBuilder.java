@@ -12,6 +12,7 @@ public class GenerateBuilder {
 	private List<ConfigModel> generateModels;// 需要生成的模式
 	private GenerateListener listener;
 	private String iconName;
+	private File file;
 
 	public GenerateBuilder setRootPath(String rootPath) {
 		this.rootPath = rootPath;
@@ -38,6 +39,11 @@ public class GenerateBuilder {
 		return this;
 	}
 
+	public GenerateBuilder setSaveFile(File file) {
+		this.file = file;
+		return this;
+	}
+
 	public void generate() {
 		if (rootPath != null && !rootPath.equals("")) {
 			File file = new File(rootPath);
@@ -61,33 +67,33 @@ public class GenerateBuilder {
 			// TODO Auto-generated method stub
 			super.run();
 			File srcFile = new File(rootPath);
-			if(listener!=null)
-			{
+			if (listener != null) {
 				listener.generateStart();
 			}
 			if (srcFile.exists() && srcFile.isDirectory()) {
-				List<File> files = FileUtils.getWithEnd(srcFile, "jpg",
-						"png");
+				List<File> files = FileUtils.getWithEnd(srcFile, "jpg", "png");
 				if (files != null) {
 					for (File file : files) {
 						if (file.isFile()) {
 							System.out.println("文件名---->"
 									+ file.getAbsolutePath());
 							for (ConfigModel model : generateModels) {
-								File dstFile = new File(
+								File dstFile = GenerateBuilder.this.file != null ? new File(
+										GenerateBuilder.this.file,
+										model.getFolderName() + "/"
+												+ file.getName()) : new File(
 										srcFile.getParentFile(),
 										model.getFolderName() + "/"
 												+ file.getName());
 								FileUtils.createFolder(dstFile.getParentFile());
-								if(file.getName().equals(iconName))
-								{
-									ImageUtils.writeHighQuality(
-											ImageUtils.zoomImageIcon(file,
-													model.getIconWidth()), dstFile);
-								}
-								else{
-									ImageUtils.writeHighQuality(
-											ImageUtils.zoomImage(file,
+								if (file.getName().equals(iconName)) {
+									ImageUtils.writeHighQuality(ImageUtils
+											.zoomImageIcon(file,
+													model.getIconWidth()),
+											dstFile);
+								} else {
+									ImageUtils.writeHighQuality(ImageUtils
+											.zoomImage(file,
 													currentModel.getWidth(),
 													model.getWidth()), dstFile);
 								}
