@@ -653,6 +653,7 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 		// TODO Auto-generated method stub
 		JOptionPane.showMessageDialog(null, "生成成功!", "提示",
 				JOptionPane.DEFAULT_OPTION);
+		jButton3.setEnabled(true);
 	}
 
 	@Override
@@ -660,6 +661,7 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 		// TODO Auto-generated method stub
 		JOptionPane.showMessageDialog(null, message, "失败",
 				JOptionPane.ERROR_MESSAGE);
+		jButton3.setEnabled(true);
 	}
 
 	@Override
@@ -667,6 +669,7 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 		// TODO Auto-generated method stub
 		// JOptionPane.showMessageDialog(null, "正在生成中，请耐心等待,点击确认继续!",
 		// "提示",JOptionPane.DEFAULT_OPTION);
+		jButton3.setEnabled(false);
 	}
 
 	@Override
