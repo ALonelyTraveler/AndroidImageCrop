@@ -47,6 +47,7 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 			jButton7;
 	public JTextField jField, jField2, jField3, jField4, jField5;
 	public JComboBox jcb1;
+	public JCheckBox recursion;
 	public String filePath = System.getProperty("user.home");
 	public JPanel panel_category_select;
 	public int index = 0;
@@ -134,8 +135,9 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 				jLabel2_img.getIconWidth(), jLabel2_img.getIconHeight());
 		jLabel2.setIcon(jLabel2_img);
 
+		
 		// 版本号显示
-		jLabel11 = new JLabel("版本号:2.0");
+		jLabel11 = new JLabel("版本号:2.1");
 		jLabel11.setForeground(Color.WHITE);
 		jLabel11.setFont(new Font(null, 1, 18));
 		jLabel11.setBounds(
@@ -251,14 +253,31 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 				return true;
 			}
 		});
-
+		
+		x = jLabel2_img.getIconWidth();
+		y = y + componetHeight + 20;
+		JLabel jLabel16 = new JLabel("是否递归：");
+		jLabel16.setFont(new Font(null, 1, 15));
+		jLabel16.setForeground(Color.white);
+		jLabel16.setBounds(x, y,  (width - x) / 5,
+				componetHeight);
+		
+		x = x + jLabel16.getWidth();
+		recursion = new JCheckBox("选择");
+		recursion.setBackground(new Color(102, 153, 204));
+		recursion.setBounds(x, y, (width - jLabel2_img.getIconWidth()) / 6,
+				componetHeight);
+		
+		
+		
+		x = jLabel2_img.getIconWidth();
 		jLabel8 = new JLabel("图片规格：");
 		jLabel8.setFont(new Font(null, 1, 15));
 		jLabel8.setForeground(Color.white);
 		y = y + componetHeight + 20;
 		jLabel8.setBounds(x, y, (width - jLabel2_img.getIconWidth()) / 6,
 				componetHeight);
-		jcb1 = new JComboBox<>(new DefaultComboBoxModel());
+		jcb1 = new JComboBox(new DefaultComboBoxModel());
 		x = x + jLabel8.getWidth();
 		jcb1.setBounds(x, y, (width - jLabel2_img.getIconWidth()) / 6,
 				componetHeight);
@@ -383,6 +402,7 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 			panel_category_select.add(checkBox);
 			count++;
 		}
+		
 		jLabel6 = new JLabel("注：如果选择了源尺寸将会覆盖源文件");
 		jLabel6.setFont(new Font(null, 1, 15));
 		jLabel6.setForeground(Color.red);
@@ -427,6 +447,8 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 		jPanel.add(jLabel9);
 		jPanel.add(jLabel5);
 		jPanel.add(jField3);
+		jPanel.add(jLabel16);
+		jPanel.add(recursion);
 		jPanel.add(jLabel4);
 		jPanel.add(jField2);
 		jPanel.add(jLabel3);
@@ -519,6 +541,8 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 						useable.add(models.get(i));
 					}
 				}
+
+				boolean isRecursion = recursion.isSelected();
 				if (useable.size() > 0) {
 					String path = jField.getText();
 					ConfigModel currentModel = models.get(index);
@@ -532,6 +556,7 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 									jField5.getText().equals("") ? null
 											: new File(jField5.getText()))
 							.setGenerateListener(ImageCropMainFrame.this)
+							.setRecursion(isRecursion)
 							.generate();
 				}
 			}

@@ -13,6 +13,7 @@ public class GenerateBuilder {
 	private GenerateListener listener;
 	private String iconName;
 	private File file;
+	private boolean isRecursion = false;
 
 	public GenerateBuilder setRootPath(String rootPath) {
 		this.rootPath = rootPath;
@@ -21,6 +22,11 @@ public class GenerateBuilder {
 
 	public GenerateBuilder setCurrentMode(ConfigModel model) {
 		this.currentModel = model;
+		return this;
+	}
+
+	public GenerateBuilder setRecursion(boolean isRecursion) {
+		this.isRecursion = isRecursion;
 		return this;
 	}
 
@@ -71,39 +77,53 @@ public class GenerateBuilder {
 				listener.generateStart();
 			}
 			if (srcFile.exists() && srcFile.isDirectory()) {
-				List<File> files = FileUtils.getWithEnd(srcFile, "jpg", "png");
-				if (files != null) {
-					for (File file : files) {
-						if (file.isFile()) {
-							System.out.println("文件名---->"
-									+ file.getAbsolutePath());
-							for (ConfigModel model : generateModels) {
-								File dstFile = GenerateBuilder.this.file != null ? new File(
-										GenerateBuilder.this.file,
-										model.getFolderName() + "/"
-												+ file.getName()) : new File(
-										srcFile.getParentFile(),
-										model.getFolderName() + "/"
-												+ file.getName());
-								FileUtils.createFolder(dstFile.getParentFile());
-								if (file.getName().equals(iconName)) {
-									ImageUtils.writeHighQuality(ImageUtils
-											.zoomImageIcon(file,
-													model.getIconWidth()),
-											dstFile);
-								} else {
-									ImageUtils.writeHighQuality(ImageUtils
-											.zoomImage(file,
-													currentModel.getWidth(),
-													model.getWidth()), dstFile);
-								}
-							}
-						}
-					}
-				}
+				generate(srcFile, "/", isRecursion);
 			}
 			if (listener != null) {
 				listener.generateSuccess();
+			}
+		}
+	}
+
+	private void generate(File srcdir, String dstRelativeDir, boolean isRetry) {
+		File[] files = srcdir.listFiles();
+		if (files != null) {
+			for (File single : files) {
+				if (single.isFile()
+						&& (single.getName().endsWith(".JPG")
+								|| single.getName().endsWith(".PNG")
+								|| single.getName().endsWith(".jpg") || single
+								.getName().endsWith(".png"))) {
+					for (ConfigModel model : generateModels) {
+						File dstFile = GenerateBuilder.this.file != null ? new File(
+								GenerateBuilder.this.file,
+								model.getFolderName()+ dstRelativeDir + single.getName())
+								: new File(srcdir.getParentFile(),
+										model.getFolderName()
+												+ dstRelativeDir
+												+ single.getName());
+								System.out.println(dstFile.getAbsolutePath());
+						// File dstFile = new File(dstDir, single.getName());
+						FileUtils.createFolder(dstFile.getParentFile());
+						if (single.getName().equals(iconName)) {
+							ImageUtils.writeHighQuality(
+									ImageUtils.zoomImageIcon(single,
+											model.getIconWidth()), dstFile);
+						} else {
+							ImageUtils.writeHighQuality(
+									ImageUtils.zoomImage(single,
+											currentModel.getWidth(),
+											model.getWidth()), dstFile);
+						}
+					}
+				} else if (single.isDirectory() && isRetry) {
+					String relativeString = single.getAbsolutePath().replace(
+							srcdir.getAbsolutePath(), "")
+							+ "/";
+					System.out.println("--"+relativeString);
+					generate(
+							single,relativeString, isRetry);
+				}
 			}
 		}
 	}
