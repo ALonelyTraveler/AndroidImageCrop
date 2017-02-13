@@ -1,10 +1,6 @@
 package com.android.img.crop.swing;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -20,19 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.TransferHandler;
+import javax.swing.*;
 
 import com.android.img.crop.listener.GenerateListener;
 import com.android.img.crop.model.ConfigModel;
@@ -98,21 +82,35 @@ public class ImageCropMainFrame extends JFrame implements GenerateListener {
 		}
 		init();
 		initListener();
-		// setUndecorated(true);
-		// setIconImage(Toolkit.getDefaultToolkit().createImage(LoginFrame.class.getResource("/png/zhuye.png")));
+		Rectangle rectangle = jPanel.getBounds();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int centerX = screenSize.width / 2;
 		int centerY = screenSize.height / 2;
 		setBounds(centerX - width / 2, centerY - height / 2, width, height);
 		setVisible(true);
-		this.setResizable(false);
+		setLocationRelativeTo(getOwner()); //居中显示
+		this.setResizable(true);
+		setLocationRelativeTo(null);
 
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		if (getWidth() < width) {
+			setSize(width,getHeight());
+		}
+		if(getHeight() < height){
+			setSize(getWidth(),height);
+		}
+		jPanel.setBounds(0,0,getWidth(),getHeight());
 	}
 
 	void init() {
 		// new Color(51,153,51)绿色
 		// new Color(102,153,204) //蓝色
 		// new Color(204,204,204);//灰色
+		JFrame.setDefaultLookAndFeelDecorated(true);
 		y = 0;
 		x = 0;
 		checkBoxs.clear();
